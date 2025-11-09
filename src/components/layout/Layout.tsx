@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { AppBar } from './AppBar';
 import { NavigationRail } from './NavigationRail';
+import { OfflineBanner } from '@/components/OfflineBanner';
 import { cn } from '@/lib/utils';
 
 interface LayoutProps {
@@ -13,6 +14,7 @@ export function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen w-full">
       <AppBar onMenuClick={() => setNavOpen(!navOpen)} />
+      <OfflineBanner />
       
       {/* Overlay for mobile */}
       {navOpen && (
