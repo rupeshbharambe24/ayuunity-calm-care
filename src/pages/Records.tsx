@@ -48,12 +48,12 @@ export default function Records() {
       {/* Filters & Search */}
       <Card className="shadow-md">
         <CardContent className="pt-6">
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Input
               placeholder={t('common.search')}
-              className="flex-1"
+              className="flex-1 min-w-[200px]"
             />
-            <Button variant="outline" className="gap-2">
+            <Button variant="outline" className="gap-2 sm:w-auto w-full">
               <Filter className="h-4 w-4" />
               {t('common.filter')}
             </Button>
@@ -83,43 +83,50 @@ export default function Records() {
         <CardHeader>
           <CardTitle>Your Records ({records.length})</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
+        <CardContent className="px-3 sm:px-6">
+          <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {records.map((record) => {
               const Icon = typeIcons[record.type as keyof typeof typeIcons];
               const colorClass = typeColors[record.type as keyof typeof typeColors];
               
               return (
-                <div
+                <Card
                   key={record.id}
-                  className="flex items-center gap-4 rounded-lg border p-4 hover:bg-muted/50 transition-colors"
+                  className="w-full max-w-full hover:shadow-md transition-all"
                 >
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${colorClass}`}>
-                    <Icon className="h-6 w-6" />
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium truncate">{record.title}</div>
-                    <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1">
-                      <span>{record.date}</span>
-                      <span>•</span>
-                      <span>{record.size}</span>
+                  <CardContent className="p-4">
+                    <div className="flex items-start gap-3 min-w-0">
+                      <div className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg ${colorClass}`}>
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium truncate" title={record.title}>
+                          {record.title}
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground mt-1">
+                          <span className="whitespace-nowrap">{record.date}</span>
+                          <span>•</span>
+                          <span className="whitespace-nowrap">{record.size}</span>
+                        </div>
+                        <Badge variant="outline" className="mt-2 text-xs">
+                          {t(`records.${record.type}`)}
+                        </Badge>
+                      </div>
                     </div>
-                  </div>
 
-                  <Badge variant="outline" className="hidden sm:inline-flex">
-                    {t(`records.${record.type}`)}
-                  </Badge>
-
-                  <div className="flex gap-2">
-                    <Button variant="ghost" size="icon" title="View">
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" title="Share">
-                      <Share2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
+                    <div className="flex gap-2 mt-3">
+                      <Button variant="outline" size="sm" className="flex-1 gap-2" title="View">
+                        <Eye className="h-4 w-4" />
+                        View
+                      </Button>
+                      <Button variant="outline" size="sm" className="flex-1 gap-2" title="Share">
+                        <Share2 className="h-4 w-4" />
+                        Share
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
               );
             })}
           </div>

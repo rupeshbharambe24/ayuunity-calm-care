@@ -117,6 +117,7 @@ export interface User {
   gender?: 'male' | 'female' | 'other';
   bloodGroup?: string;
   avatar?: string;
+  roles?: string[];
 }
 
 export interface Record {

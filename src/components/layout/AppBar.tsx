@@ -1,12 +1,14 @@
-import { Bell, Globe, Moon, Sun, Contrast, Menu, Search } from 'lucide-react';
+import { Bell, Globe, Moon, Sun, Contrast, Menu, Search, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
@@ -17,6 +19,7 @@ interface AppBarProps {
 
 export function AppBar({ onMenuClick }: AppBarProps) {
   const { theme, setTheme } = useTheme();
+  const { signOut } = useAuth();
   const { t, i18n } = useTranslation();
 
   const themeIcon = {
@@ -122,7 +125,11 @@ export function AppBar({ onMenuClick }: AppBarProps) {
             <DropdownMenuContent align="end">
               <DropdownMenuItem>{t('settings.profile')}</DropdownMenuItem>
               <DropdownMenuItem>{t('nav.settings')}</DropdownMenuItem>
-              <DropdownMenuItem>Sign Out</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={signOut} className="text-destructive">
+                <LogOut className="mr-2 h-4 w-4" />
+                Sign Out
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

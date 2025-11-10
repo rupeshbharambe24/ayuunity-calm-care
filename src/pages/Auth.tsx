@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,14 +8,22 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 type Step = 'auth' | 'profile' | 'consent';
 
 export default function Auth() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { isAuthenticated, setUser } = useAuth();
   const [step, setStep] = useState<Step>('auth');
   const [channel, setChannel] = useState<'phone' | 'email'>('phone');
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const renderAuth = () => (
     <div className="space-y-6">
@@ -126,7 +134,18 @@ export default function Auth() {
           <ArrowLeft className="mr-2 h-4 w-4" />
           {t('auth.back')}
         </Button>
-        <Button onClick={() => navigate('/')} className="flex-1">
+        <Button onClick={() => {
+          // Mock auth - set a fake user
+          const mockUser = {
+            id: '1',
+            email: 'user@example.com',
+            name: 'Test User',
+            roles: ['patient']
+          };
+          setUser(mockUser);
+          localStorage.setItem('auth_token', 'mock-token');
+          navigate('/', { replace: true });
+        }} className="flex-1">
           {t('consent.complete')}
         </Button>
       </div>
