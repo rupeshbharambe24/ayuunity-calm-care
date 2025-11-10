@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children, roles }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading, roles: userRoles } = useAuth();
+  const { isAuthenticated, isLoading, roles: userRoles, status } = useAuth();
 
   if (isLoading) {
     return (
@@ -22,13 +22,21 @@ export function ProtectedRoute({ children, roles }: ProtectedRouteProps) {
     return <Navigate to="/auth/login" replace />;
   }
 
+  if (status === 'pending') {
+    return <Navigate to="/auth/pending" replace />;
+  }
+
+  if (status === 'rejected') {
+    return <Navigate to="/auth/denied" replace />;
+  }
+
   if (roles && roles.length > 0) {
     const hasRequiredRole = roles.some((role) => userRoles.includes(role));
     if (!hasRequiredRole) {
       return (
         <div className="flex min-h-screen items-center justify-center">
           <div className="text-center">
-            <h1 className="mb-4 text-4xl font-bold">403</h1>
+            <h1 className="mb-4 text-4xl font-bold text-foreground">403</h1>
             <p className="mb-4 text-xl text-muted-foreground">Access Denied</p>
             <p className="text-muted-foreground">You don't have permission to access this page.</p>
           </div>

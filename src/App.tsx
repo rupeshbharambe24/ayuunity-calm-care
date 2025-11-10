@@ -8,7 +8,12 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Layout } from "./components/layout/Layout";
 import Dashboard from "./pages/Dashboard";
-import Auth from "./pages/Auth";
+import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
+import SignupPatient from "./pages/auth/SignupPatient";
+import VerifyOTP from "./pages/auth/VerifyOTP";
+import Pending from "./pages/auth/Pending";
+import Denied from "./pages/auth/Denied";
 import Records from "./pages/Records";
 import Appointments from "./pages/Appointments";
 import Doctors from "./pages/Doctors";
@@ -36,7 +41,12 @@ const App = () => (
         <BrowserRouter>
           <AuthProvider>
             <Routes>
-              <Route path="/auth/login" element={<Auth />} />
+              <Route path="/auth/login" element={<Login />} />
+              <Route path="/auth/signup" element={<Signup />} />
+              <Route path="/auth/signup/patient" element={<SignupPatient />} />
+              <Route path="/auth/verify-otp" element={<VerifyOTP />} />
+              <Route path="/auth/pending" element={<Pending />} />
+              <Route path="/auth/denied" element={<Denied />} />
               <Route path="/auth" element={<Navigate to="/auth/login" replace />} />
               <Route path="/offline" element={<Offline />} />
               <Route path="/" element={<ProtectedRoute><Layout><Dashboard /></Layout></ProtectedRoute>} />

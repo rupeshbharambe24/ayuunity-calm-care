@@ -118,6 +118,7 @@ export interface User {
   bloodGroup?: string;
   avatar?: string;
   roles?: string[];
+  status?: 'active' | 'pending' | 'rejected';
 }
 
 export interface Record {

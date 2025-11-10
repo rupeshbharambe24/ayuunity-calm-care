@@ -8,6 +8,7 @@ interface AuthContextType {
   isLoading: boolean;
   isAuthenticated: boolean;
   roles: string[];
+  status: 'active' | 'pending' | 'rejected' | null;
   signOut: () => Promise<void>;
   setUser: (user: User | null) => void;
 }
@@ -16,6 +17,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [status, setStatus] = useState<'active' | 'pending' | 'rejected' | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -23,11 +25,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Bootstrap session on mount
     const initAuth = async () => {
       try {
-        const userData = await apiClient.get<User>('/users/me');
-        setUser(userData);
+        const sessionData = await apiClient.get<{ user: User; roles: string[]; status: 'active' | 'pending' | 'rejected' }>('/auth/session');
+        setUser(sessionData.user);
+        setStatus(sessionData.status);
       } catch (error) {
         // User not authenticated
         setUser(null);
+        setStatus(null);
       } finally {
         setIsLoading(false);
       }
@@ -44,8 +48,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } finally {
       // Clear auth state regardless of API response
       setUser(null);
-      localStorage.removeItem('auth_token');
-      navigate('/auth/login');
+      setStatus(null);
+      apiClient.setToken(null);
+      navigate('/auth/login', { replace: true });
     }
   };
 
@@ -58,6 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading,
         isAuthenticated: !!user,
         roles,
+        status,
         setUser,
         signOut,
       }}
