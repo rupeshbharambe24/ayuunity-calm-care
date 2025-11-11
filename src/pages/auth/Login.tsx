@@ -110,15 +110,27 @@ export default function Login() {
             {loading ? t('auth.sending') : t('auth.sendOtp')}
           </Button>
 
-          <div className="text-center text-sm">
-            <span className="text-muted-foreground">{t('auth.noAccount')} </span>
-            <Button
-              variant="link"
-              className="p-0 h-auto font-normal"
-              onClick={() => navigate('/auth/signup')}
-            >
-              {t('auth.signUp')}
-            </Button>
+          <div className="text-center text-sm space-y-2">
+            <div>
+              <span className="text-muted-foreground">{t('auth.noAccount')} </span>
+              <Button
+                variant="link"
+                className="p-0 h-auto font-normal"
+                onClick={() => navigate('/auth/signup')}
+              >
+                {t('auth.signUp')}
+              </Button>
+            </div>
+            <div>
+              <span className="text-muted-foreground">Healthcare professional? </span>
+              <Button
+                variant="link"
+                className="p-0 h-auto font-normal"
+                onClick={() => navigate('/auth/pro-login')}
+              >
+                Professional Sign In
+              </Button>
+            </div>
           </div>
 
           <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground">

@@ -109,6 +109,27 @@ class ApiClient {
 
     // Mock OTP verify
     if (endpoint === '/auth/otp/verify' && method === 'POST') {
+      // Check if this is a professional login (will have role in state)
+      const isPro = Math.random() > 0.5; // In real demo, read from request
+      
+      if (isPro) {
+        // Professional login - return pending status by default
+        const demoProStatus = import.meta.env.VITE_DEMO_PRO_STATUS || 'pending';
+        return {
+          token: 'demo-token-pro-' + Date.now(),
+          user: {
+            id: 'demo-user-pro-1',
+            name: 'Demo Professional',
+            email: 'pro@ayuunity.health',
+            roles: ['doctor'],
+            status: demoProStatus,
+          },
+          roles: ['doctor'],
+          status: demoProStatus,
+        } as T;
+      }
+      
+      // Patient login
       return {
         token: 'demo-token-' + Date.now(),
         user: {

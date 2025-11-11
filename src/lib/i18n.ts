@@ -81,6 +81,22 @@ const resources = {
       'auth.roles.researcherDesc': 'Medical research institution',
       'auth.roles.ambulance': 'Ambulance Service',
       'auth.roles.ambulanceDesc': 'Emergency transport operator',
+
+      // Professional Login
+      'auth.proLoginTitle': 'Professional Sign In',
+      'auth.proLoginSubtitle': 'Use your official identifier and contact to sign in.',
+      'auth.selectRole': 'Select your role',
+      'auth.registrationBoard': 'Registration Board',
+      'auth.registrationNumber': 'Registration Number',
+      'auth.registrationYear': 'Registration Year',
+      'auth.officialEmail': 'Official Email',
+      'auth.officialPhone': 'Official Phone',
+      'auth.council': 'Council',
+      'auth.system': 'System',
+      'auth.facilityEmail': 'Facility Email',
+      'auth.licenseNumber': 'License/GST Number',
+      'auth.drugLicense': 'Drug License Number',
+      'auth.labLicense': 'Lab License/NABL ID',
       
       // Profile
       'profile.title': 'Complete Your Profile',

@@ -12,6 +12,7 @@ import { apiClient } from "./lib/api";
 import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/auth/Login";
+import ProLogin from "./pages/auth/ProLogin";
 import Signup from "./pages/auth/Signup";
 import SignupPatient from "./pages/auth/SignupPatient";
 import VerifyOTP from "./pages/auth/VerifyOTP";
@@ -47,6 +48,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Landing />} />
               <Route path="/auth/login" element={<Login />} />
+              <Route path="/auth/pro-login" element={<ProLogin />} />
               <Route path="/auth/signup" element={<Signup />} />
               <Route path="/auth/signup/patient" element={<SignupPatient />} />
               <Route path="/auth/verify-otp" element={<VerifyOTP />} />
