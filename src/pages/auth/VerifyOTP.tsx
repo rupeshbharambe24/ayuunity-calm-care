@@ -90,7 +90,7 @@ export default function VerifyOTP() {
       } else if (response.status === 'rejected') {
         navigate('/auth/denied', { replace: true });
       } else {
-        navigate('/', { replace: true });
+        navigate('/dashboard', { replace: true });
       }
     } catch (error: any) {
       toast({

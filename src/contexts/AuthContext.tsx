@@ -24,6 +24,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Bootstrap session on mount
     const initAuth = async () => {
+      // Check API health first
+      await apiClient.checkHealth();
+      
       try {
         const sessionData = await apiClient.get<{ user: User; roles: string[]; status: 'active' | 'pending' | 'rejected' }>('/auth/session');
         setUser(sessionData.user);

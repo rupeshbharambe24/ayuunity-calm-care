@@ -7,6 +7,9 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Layout } from "./components/layout/Layout";
+import { DemoBanner } from "./components/DemoBanner";
+import { apiClient } from "./lib/api";
+import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
@@ -38,9 +41,11 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        {apiClient.isMockMode() && <DemoBanner />}
         <BrowserRouter>
           <AuthProvider>
             <Routes>
+              <Route path="/" element={<Landing />} />
               <Route path="/auth/login" element={<Login />} />
               <Route path="/auth/signup" element={<Signup />} />
               <Route path="/auth/signup/patient" element={<SignupPatient />} />
@@ -49,7 +54,7 @@ const App = () => (
               <Route path="/auth/denied" element={<Denied />} />
               <Route path="/auth" element={<Navigate to="/auth/login" replace />} />
               <Route path="/offline" element={<Offline />} />
-              <Route path="/" element={<ProtectedRoute><Layout><Dashboard /></Layout></ProtectedRoute>} />
+              <Route path="/dashboard" element={<ProtectedRoute><Layout><Dashboard /></Layout></ProtectedRoute>} />
               <Route path="/records" element={<ProtectedRoute><Layout><Records /></Layout></ProtectedRoute>} />
               <Route path="/appointments" element={<ProtectedRoute><Layout><Appointments /></Layout></ProtectedRoute>} />
               <Route path="/doctors" element={<ProtectedRoute><Layout><Doctors /></Layout></ProtectedRoute>} />

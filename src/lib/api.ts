@@ -1,4 +1,5 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const USE_MOCKS = import.meta.env.VITE_USE_MOCKS === 'true' || import.meta.env.DEV;
 
 interface ApiError {
   error: {
@@ -11,10 +12,34 @@ interface ApiError {
 class ApiClient {
   private baseURL: string;
   private token: string | null = null;
+  private mockMode: boolean = USE_MOCKS;
+  private healthCheckDone: boolean = false;
 
   constructor(baseURL: string) {
     this.baseURL = baseURL;
     this.token = localStorage.getItem('ayuunity-token');
+  }
+
+  async checkHealth(): Promise<boolean> {
+    if (this.healthCheckDone) return !this.mockMode;
+    
+    try {
+      const response = await fetch(`${this.baseURL}/health`, {
+        method: 'GET',
+        signal: AbortSignal.timeout(3000),
+      });
+      this.mockMode = !response.ok;
+      this.healthCheckDone = true;
+      return response.ok;
+    } catch {
+      this.mockMode = true;
+      this.healthCheckDone = true;
+      return false;
+    }
+  }
+
+  isMockMode(): boolean {
+    return this.mockMode;
   }
 
   setToken(token: string | null) {
@@ -30,6 +55,12 @@ class ApiClient {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
+    // Mock responses in demo mode
+    if (this.mockMode) {
+      await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 300));
+      return this.getMockResponse<T>(endpoint, options.method || 'GET');
+    }
+
     const headers: { [key: string]: string } = {
       'Content-Type': 'application/json',
     };
@@ -42,22 +73,89 @@ class ApiClient {
       headers['Authorization'] = `Bearer ${this.token}`;
     }
 
-    const response = await fetch(`${this.baseURL}${endpoint}`, {
-      ...options,
-      headers,
-    });
+    try {
+      const response = await fetch(`${this.baseURL}${endpoint}`, {
+        ...options,
+        headers,
+      });
 
-    if (!response.ok) {
-      const error: ApiError = await response.json().catch(() => ({
-        error: {
-          code: 'UNKNOWN_ERROR',
-          message: 'An unexpected error occurred',
-        },
-      }));
-      throw new Error(error.error.message);
+      if (!response.ok) {
+        const error: ApiError = await response.json().catch(() => ({
+          error: {
+            code: 'UNKNOWN_ERROR',
+            message: 'An unexpected error occurred',
+          },
+        }));
+        throw new Error(error.error.message);
+      }
+
+      return response.json();
+    } catch (error) {
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        // Network error - enable mock mode and retry
+        this.mockMode = true;
+        await new Promise(resolve => setTimeout(resolve, 500));
+        return this.getMockResponse<T>(endpoint, options.method || 'GET');
+      }
+      throw error;
+    }
+  }
+
+  private getMockResponse<T>(endpoint: string, method: string): T {
+    // Mock OTP request
+    if (endpoint === '/auth/otp/request' && method === 'POST') {
+      return { request_id: 'demo-req-' + Date.now() } as T;
     }
 
-    return response.json();
+    // Mock OTP verify
+    if (endpoint === '/auth/otp/verify' && method === 'POST') {
+      return {
+        token: 'demo-token-' + Date.now(),
+        user: {
+          id: 'demo-user-1',
+          name: 'Demo User',
+          email: 'demo@ayuunity.health',
+          roles: ['patient'],
+          status: 'active',
+        },
+        roles: ['patient'],
+        status: 'active',
+      } as T;
+    }
+
+    // Mock session
+    if (endpoint === '/auth/session' && method === 'GET') {
+      if (this.token && this.token.startsWith('demo-token')) {
+        return {
+          user: {
+            id: 'demo-user-1',
+            name: 'Demo User',
+            email: 'demo@ayuunity.health',
+            roles: ['patient'],
+            status: 'active',
+          },
+          roles: ['patient'],
+          status: 'active',
+        } as T;
+      }
+      throw new Error('Not authenticated');
+    }
+
+    // Mock logout
+    if (endpoint === '/auth/logout' && method === 'POST') {
+      return {} as T;
+    }
+
+    // Mock patient signup
+    if (endpoint === '/auth/signup/patient' && method === 'POST') {
+      return {
+        user_id: 'demo-user-' + Date.now(),
+        token: 'demo-token-' + Date.now(),
+      } as T;
+    }
+
+    // Default empty response
+    return {} as T;
   }
 
   async get<T>(endpoint: string): Promise<T> {

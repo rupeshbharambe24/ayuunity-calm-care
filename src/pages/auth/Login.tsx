@@ -15,22 +15,22 @@ export default function Login() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { isAuthenticated, status } = useAuth();
+  const { isAuthenticated, isLoading, status } = useAuth();
   const [channel, setChannel] = useState<'phone' | 'email'>('phone');
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (!isLoading && isAuthenticated) {
       if (status === 'pending') {
         navigate('/auth/pending', { replace: true });
       } else if (status === 'rejected') {
         navigate('/auth/denied', { replace: true });
       } else {
-        navigate('/', { replace: true });
+        navigate('/dashboard', { replace: true });
       }
     }
-  }, [isAuthenticated, status, navigate]);
+  }, [isAuthenticated, isLoading, status, navigate]);
 
   const handleSendOTP = async () => {
     if (!value) {

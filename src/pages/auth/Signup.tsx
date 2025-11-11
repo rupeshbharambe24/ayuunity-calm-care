@@ -27,19 +27,13 @@ const roles = [
 export default function Signup() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { isAuthenticated, status } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
 
   useEffect(() => {
-    if (isAuthenticated) {
-      if (status === 'pending') {
-        navigate('/auth/pending', { replace: true });
-      } else if (status === 'rejected') {
-        navigate('/auth/denied', { replace: true });
-      } else {
-        navigate('/', { replace: true });
-      }
+    if (!isLoading && isAuthenticated) {
+      navigate('/dashboard', { replace: true });
     }
-  }, [isAuthenticated, status, navigate]);
+  }, [isAuthenticated, isLoading, navigate]);
 
   const handleRoleSelect = (roleId: string) => {
     if (roleId === 'patient') {
