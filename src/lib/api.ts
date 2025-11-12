@@ -169,10 +169,17 @@ class ApiClient {
 
     // Mock patient signup
     if (endpoint === '/auth/signup/patient' && method === 'POST') {
+      const token = 'demo-token-patient-' + Date.now();
+      this.setToken(token);
       return {
         user_id: 'demo-user-' + Date.now(),
-        token: 'demo-token-' + Date.now(),
+        token: token,
       } as T;
+    }
+    
+    // Mock draft endpoints
+    if (endpoint.includes('/draft')) {
+      return {} as T;
     }
 
     // Default empty response
