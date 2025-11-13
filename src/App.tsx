@@ -15,6 +15,7 @@ import Login from "./pages/auth/Login";
 import ProLogin from "./pages/auth/ProLogin";
 import Signup from "./pages/auth/Signup";
 import SignupPatient from "./pages/auth/SignupPatient";
+import SignupDoctor from "./pages/auth/SignupDoctor";
 import VerifyOTP from "./pages/auth/VerifyOTP";
 import Pending from "./pages/auth/Pending";
 import Denied from "./pages/auth/Denied";
@@ -52,8 +53,9 @@ const App = () => (
               <Route path="/auth/signup" element={<Signup />} />
               <Route path="/auth/signup/patient" element={<SignupPatient />} />
               <Route path="/auth/verify-otp" element={<VerifyOTP />} />
-              <Route path="/auth/pending" element={<Pending />} />
-              <Route path="/auth/denied" element={<Denied />} />
+        <Route path="/auth/pending" element={<Pending />} />
+        <Route path="/auth/denied" element={<Denied />} />
+        <Route path="/auth/signup/doctor" element={<SignupDoctor />} />
               <Route path="/auth" element={<Navigate to="/auth/login" replace />} />
               <Route path="/offline" element={<Offline />} />
               <Route path="/dashboard" element={<ProtectedRoute><Layout><Dashboard /></Layout></ProtectedRoute>} />

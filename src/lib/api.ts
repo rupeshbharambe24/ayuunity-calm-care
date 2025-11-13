@@ -177,6 +177,14 @@ class ApiClient {
       } as T;
     }
     
+    // Mock professional signup
+    if (endpoint.includes('/auth/signup/') && method === 'POST') {
+      return {
+        ticket_id: `demo-ticket-${Date.now()}`,
+        status: 'pending',
+      } as T;
+    }
+    
     // Mock draft endpoints
     if (endpoint.includes('/draft')) {
       return {} as T;
@@ -232,6 +240,25 @@ class ApiClient {
 }
 
 export const apiClient = new ApiClient(API_BASE_URL);
+
+// Helper function for simple API requests
+export async function apiRequest<T = any>(endpoint: string, options?: RequestInit): Promise<T> {
+  const method = options?.method || 'GET';
+  const body = options?.body ? JSON.parse(options.body as string) : undefined;
+  
+  switch (method) {
+    case 'GET':
+      return apiClient.get<T>(endpoint);
+    case 'POST':
+      return apiClient.post<T>(endpoint, body);
+    case 'PATCH':
+      return apiClient.patch<T>(endpoint, body);
+    case 'DELETE':
+      return apiClient.delete<T>(endpoint);
+    default:
+      return apiClient.get<T>(endpoint);
+  }
+}
 
 // Type definitions for API responses
 export interface User {
