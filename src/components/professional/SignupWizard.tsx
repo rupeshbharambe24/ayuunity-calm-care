@@ -7,8 +7,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { Form } from '@/components/ui/form';
 import { toast } from 'sonner';
-import { ChevronLeft, ChevronRight, Check, Upload } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import type { z } from 'zod';
 
 interface WizardStep {
@@ -72,95 +73,100 @@ export const SignupWizard = ({ role, schema, steps, onSubmit }: SignupWizardProp
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <Card className="w-full max-w-4xl p-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">
-            {t(`auth.roles.${role}`)} {t('auth.signupTitle')}
-          </h1>
-          <p className="text-muted-foreground">
-            {t('auth.proSignupSubtitle', 'Complete your professional profile')}
-          </p>
-        </div>
+        <Form {...form}>
+          <form onSubmit={handleSubmit}>
+            {/* Header */}
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold mb-2">
+                {t(`auth.roles.${role}`)} {t('auth.signupTitle')}
+              </h1>
+              <p className="text-muted-foreground">
+                {t('auth.proSignupSubtitle', 'Complete your professional profile')}
+              </p>
+            </div>
 
-        {/* Progress */}
-        <div className="mb-8">
-          <div className="flex justify-between mb-2">
-            {steps.map((step, index) => (
-              <div
-                key={step.id}
-                className={`flex items-center ${
-                  index < totalSteps - 1 ? 'flex-1' : ''
-                }`}
-              >
-                <div
-                  className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors ${
-                    index < currentStep
-                      ? 'bg-primary border-primary text-primary-foreground'
-                      : index === currentStep
-                      ? 'border-primary text-primary'
-                      : 'border-muted text-muted-foreground'
-                  }`}
-                >
-                  {index < currentStep ? (
-                    <Check className="w-5 h-5" />
-                  ) : (
-                    <span>{index + 1}</span>
-                  )}
-                </div>
-                {index < totalSteps - 1 && (
-                  <div className="flex-1 h-0.5 bg-border mx-2" />
-                )}
+            {/* Progress */}
+            <div className="mb-8">
+              <div className="flex justify-between mb-2">
+                {steps.map((step, index) => (
+                  <div
+                    key={step.id}
+                    className={`flex items-center ${
+                      index < totalSteps - 1 ? 'flex-1' : ''
+                    }`}
+                  >
+                    <div
+                      className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors ${
+                        index < currentStep
+                          ? 'bg-primary border-primary text-primary-foreground'
+                          : index === currentStep
+                          ? 'border-primary text-primary'
+                          : 'border-muted text-muted-foreground'
+                      }`}
+                    >
+                      {index < currentStep ? (
+                        <Check className="w-5 h-5" />
+                      ) : (
+                        <span>{index + 1}</span>
+                      )}
+                    </div>
+                    {index < totalSteps - 1 && (
+                      <div className="flex-1 h-0.5 bg-border mx-2" />
+                    )}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <Progress value={progress} className="h-2" />
-          <div className="flex justify-between mt-2 text-sm text-muted-foreground">
-            {steps.map((step, index) => (
-              <span
-                key={step.id}
-                className={index === currentStep ? 'font-medium text-foreground' : ''}
+              <Progress value={progress} className="h-2" />
+              <div className="flex justify-between mt-2 text-sm text-muted-foreground">
+                {steps.map((step, index) => (
+                  <span
+                    key={step.id}
+                    className={index === currentStep ? 'font-medium text-foreground' : ''}
+                  >
+                    {step.label}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Step Content */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentStep}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
               >
-                {step.label}
-              </span>
-            ))}
-          </div>
-        </div>
+                <CurrentStepComponent form={form} role={role} />
+              </motion.div>
+            </AnimatePresence>
 
-        {/* Step Content */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentStep}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.2 }}
-          >
-            <CurrentStepComponent form={form} role={role} />
-          </motion.div>
-        </AnimatePresence>
+            {/* Navigation */}
+            <div className="flex justify-between mt-8 pt-6 border-t">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleBack}
+                disabled={currentStep === 0 || isSubmitting}
+              >
+                <ChevronLeft className="w-4 h-4 mr-2" />
+                {t('auth.back')}
+              </Button>
 
-        {/* Navigation */}
-        <div className="flex justify-between mt-8 pt-6 border-t">
-          <Button
-            variant="outline"
-            onClick={handleBack}
-            disabled={currentStep === 0 || isSubmitting}
-          >
-            <ChevronLeft className="w-4 h-4 mr-2" />
-            {t('auth.back')}
-          </Button>
-
-          {currentStep < totalSteps - 1 ? (
-            <Button onClick={handleNext}>
-              {t('auth.next')}
-              <ChevronRight className="w-4 h-4 ml-2" />
-            </Button>
-          ) : (
-            <Button onClick={handleSubmit} disabled={isSubmitting}>
-              {isSubmitting ? t('auth.submitting') : t('auth.signup.submit')}
-            </Button>
-          )}
-        </div>
+              {currentStep < totalSteps - 1 ? (
+                <Button type="button" onClick={handleNext}>
+                  {t('auth.next')}
+                  <ChevronRight className="w-4 h-4 ml-2" />
+                </Button>
+              ) : (
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? t('auth.submitting') : t('auth.signup.submit')}
+                </Button>
+              )}
+            </div>
+          </form>
+        </Form>
       </Card>
     </div>
   );
