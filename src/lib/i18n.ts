@@ -110,7 +110,6 @@ const resources = {
       'auth.terms': 'Terms',
       'auth.privacy': 'Privacy',
       'auth.security': 'Security',
-      'auth.autoApproved': 'Auto-approved',
       'auth.stepAccount': 'Step 1: Account Information',
       'auth.stepMedical': 'Step 2: Medical Profile',
       'auth.stepConsent': 'Step 3: Privacy & Consent',
