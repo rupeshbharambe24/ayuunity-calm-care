@@ -18,7 +18,7 @@ const roles = [
   { id: 'lab', icon: FlaskConical, label: 'auth.roles.lab', desc: 'auth.roles.labDesc' },
   { id: 'ngo', icon: Heart, label: 'auth.roles.ngo', desc: 'auth.roles.ngoDesc' },
   { id: 'government', icon: Landmark, label: 'auth.roles.government', desc: 'auth.roles.governmentDesc' },
-  { id: 'insurance', icon: Shield, label: 'auth.roles.insurance', desc: 'auth.roles.insuranceDesc' },
+  { id: 'insurer', icon: Shield, label: 'auth.roles.insurance', desc: 'auth.roles.insuranceDesc' },
   { id: 'corporate', icon: Briefcase, label: 'auth.roles.corporate', desc: 'auth.roles.corporateDesc' },
   { id: 'researcher', icon: GraduationCap, label: 'auth.roles.researcher', desc: 'auth.roles.researcherDesc' },
   { id: 'ambulance', icon: Ambulance, label: 'auth.roles.ambulance', desc: 'auth.roles.ambulanceDesc' },

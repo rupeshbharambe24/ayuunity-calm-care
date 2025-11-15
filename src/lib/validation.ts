@@ -109,6 +109,189 @@ export const DoctorSignupSchema = z.object({
   }),
 });
 
+// AYUSH
+export const AyushSignupSchema = z.object({
+  account: BaseAccountSchema,
+  identifiers: z.object({
+    council: z.string().min(2),
+    reg_id: z.string().min(2),
+    system: z.string().min(2),
+    year: z.number().int().gte(1950),
+  }),
+  details: z.object({
+    degrees: z.array(z.string()).min(1),
+    institute: z.string().min(2),
+    specialties: z.array(z.string()).min(1),
+    experience_years: z.number().min(0),
+    languages: z.array(z.string()).min(1),
+    consultation_modes: z.array(z.string()).min(1),
+    clinic_locations: z.string().optional(),
+  }),
+  documents: z.array(z.object({ file_id: z.string(), type: z.string() })).min(1),
+  declarations: z.object({ truth: z.literal(true), verify_consent: z.literal(true) }),
+});
+
+// Hospital
+export const HospitalSignupSchema = z.object({
+  account: BaseOrgAccountSchema,
+  identifiers: z.object({
+    license_no: z.string().min(2),
+    gstin: z.string().min(2),
+    cin: z.string().optional(),
+  }),
+  details: z.object({
+    facility_type: z.string().min(2),
+    beds_total: z.number().int().min(0),
+    beds_icu: z.number().int().min(0),
+    opd_hours: z.string().min(2),
+    primary_officer: z.string().min(2),
+    staff_email_domain: z.string().optional(),
+  }),
+  documents: z.array(z.object({ file_id: z.string(), type: z.string() })).min(1),
+  declarations: z.object({ truth: z.literal(true), verify_consent: z.literal(true) }),
+});
+
+// Pharmacy
+export const PharmacySignupSchema = z.object({
+  account: BaseOrgAccountSchema,
+  identifiers: z.object({
+    drug_license: z.string().min(2),
+    gstin: z.string().min(2),
+  }),
+  details: z.object({
+    pharmacist_name: z.string().min(2),
+    pharmacist_reg: z.string().min(2),
+    store_address: z.string().min(3),
+    service_radius: z.number().optional(),
+    delivery: z.boolean().optional(),
+    pickup: z.boolean().optional(),
+    hours: z.string().min(2),
+  }),
+  documents: z.array(z.object({ file_id: z.string(), type: z.string() })).min(1),
+  declarations: z.object({ truth: z.literal(true), verify_consent: z.literal(true) }),
+});
+
+// Lab
+export const LabSignupSchema = z.object({
+  account: BaseOrgAccountSchema,
+  identifiers: z.object({
+    lab_license: z.string().min(2),
+    nabl_id: z.string().optional(),
+    gstin: z.string().min(2),
+  }),
+  details: z.object({
+    categories: z.array(z.string()).min(1),
+    home_collection: z.boolean().optional(),
+    tat_promises: z.string().optional(),
+    quality_manager: z.string().min(2),
+  }),
+  documents: z.array(z.object({ file_id: z.string(), type: z.string() })).min(1),
+  declarations: z.object({ truth: z.literal(true), verify_consent: z.literal(true) }),
+});
+
+// NGO
+export const NgoSignupSchema = z.object({
+  account: BaseOrgAccountSchema,
+  identifiers: z.object({
+    reg_no: z.string().min(2),
+    twelve_a: z.string().optional(),
+    fcra: z.string().optional(),
+  }),
+  details: z.object({
+    regions: z.array(z.string()).min(1),
+    program_types: z.array(z.string()).min(1),
+    poc: z.string().min(2),
+  }),
+  documents: z.array(z.object({ file_id: z.string(), type: z.string() })).min(1),
+  declarations: z.object({ truth: z.literal(true), verify_consent: z.literal(true) }),
+});
+
+// Government
+export const GovernmentSignupSchema = z.object({
+  account: BaseAccountSchema,
+  identifiers: z.object({
+    department: z.string().min(2),
+    designation: z.string().min(2),
+    official_email: z.string().email(),
+  }),
+  details: z.object({
+    office_address: z.string().min(3),
+    jurisdiction: z.string().min(2),
+  }),
+  documents: z.array(z.object({ file_id: z.string(), type: z.string() })).min(1),
+  declarations: z.object({ truth: z.literal(true), verify_consent: z.literal(true) }),
+});
+
+// Insurer
+export const InsurerSignupSchema = z.object({
+  account: BaseOrgAccountSchema,
+  identifiers: z.object({
+    irdai_or_tpa: z.string().min(2),
+    gstin: z.string().min(2),
+  }),
+  details: z.object({
+    products: z.array(z.string()).min(1),
+    regions: z.array(z.string()).min(1),
+    claims_contact: z.string().min(2),
+  }),
+  documents: z.array(z.object({ file_id: z.string(), type: z.string() })).min(1),
+  declarations: z.object({ truth: z.literal(true), verify_consent: z.literal(true) }),
+});
+
+// Corporate
+export const CorporateSignupSchema = z.object({
+  account: BaseOrgAccountSchema,
+  identifiers: z.object({
+    cin: z.string().min(2),
+    gstin: z.string().min(2),
+    domain_email: z.string().email(),
+  }),
+  details: z.object({
+    company_size: z.string().min(1),
+    hr_contact: z.string().min(2),
+    program_scope: z.array(z.string()).min(1),
+  }),
+  documents: z.array(z.object({ file_id: z.string(), type: z.string() })).min(1),
+  declarations: z.object({ truth: z.literal(true), verify_consent: z.literal(true) }),
+});
+
+// Researcher
+export const ResearcherSignupSchema = z.object({
+  account: BaseAccountSchema,
+  identifiers: z.object({
+    institution: z.string().min(2),
+    academic_email: z.string().email(),
+    irb_ref: z.string().min(2),
+  }),
+  details: z.object({
+    study_title: z.string().min(2),
+    purpose: z.string().min(10),
+    data_fields: z.array(z.string()).min(1),
+    duration: z.string().min(2),
+  }),
+  documents: z.array(z.object({ file_id: z.string(), type: z.string() })).min(1),
+  declarations: z.object({ truth: z.literal(true), verify_consent: z.literal(true) }),
+});
+
+// Ambulance
+export const AmbulanceSignupSchema = z.object({
+  account: BaseOrgAccountSchema,
+  identifiers: z.object({
+    permit_no: z.string().min(2),
+    helpline: z.string().min(7),
+  }),
+  details: z.object({
+    fleet_size: z.number().int().min(1),
+    vehicle_types: z.array(z.string()).min(1),
+    twenty_four_seven: z.boolean().optional(),
+    gps_provider: z.string().optional(),
+    coverage_area: z.string().min(2),
+    ops_contact: z.string().min(2),
+  }),
+  documents: z.array(z.object({ file_id: z.string(), type: z.string() })).min(1),
+  declarations: z.object({ truth: z.literal(true), verify_consent: z.literal(true) }),
+});
+
 // Export types
 export type ICEContact = z.infer<typeof ICEContactSchema>;
 export type Medication = z.infer<typeof MedicationSchema>;
