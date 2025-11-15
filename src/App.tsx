@@ -16,6 +16,16 @@ import ProLogin from "./pages/auth/ProLogin";
 import Signup from "./pages/auth/Signup";
 import SignupPatient from "./pages/auth/SignupPatient";
 import SignupDoctor from "./pages/auth/SignupDoctor";
+import SignupAyush from "./pages/auth/SignupAyush";
+import SignupHospital from "./pages/auth/SignupHospital";
+import SignupPharmacy from "./pages/auth/SignupPharmacy";
+import SignupLab from "./pages/auth/SignupLab";
+import SignupNgo from "./pages/auth/SignupNgo";
+import SignupGovernment from "./pages/auth/SignupGovernment";
+import SignupInsurer from "./pages/auth/SignupInsurer";
+import SignupCorporate from "./pages/auth/SignupCorporate";
+import SignupResearcher from "./pages/auth/SignupResearcher";
+import SignupAmbulance from "./pages/auth/SignupAmbulance";
 import VerifyOTP from "./pages/auth/VerifyOTP";
 import Pending from "./pages/auth/Pending";
 import Denied from "./pages/auth/Denied";
@@ -52,10 +62,20 @@ const App = () => (
               <Route path="/auth/pro-login" element={<ProLogin />} />
               <Route path="/auth/signup" element={<Signup />} />
               <Route path="/auth/signup/patient" element={<SignupPatient />} />
+              <Route path="/auth/signup/doctor" element={<SignupDoctor />} />
+              <Route path="/auth/signup/ayush" element={<SignupAyush />} />
+              <Route path="/auth/signup/hospital" element={<SignupHospital />} />
+              <Route path="/auth/signup/pharmacy" element={<SignupPharmacy />} />
+              <Route path="/auth/signup/lab" element={<SignupLab />} />
+              <Route path="/auth/signup/ngo" element={<SignupNgo />} />
+              <Route path="/auth/signup/government" element={<SignupGovernment />} />
+              <Route path="/auth/signup/insurer" element={<SignupInsurer />} />
+              <Route path="/auth/signup/corporate" element={<SignupCorporate />} />
+              <Route path="/auth/signup/researcher" element={<SignupResearcher />} />
+              <Route path="/auth/signup/ambulance" element={<SignupAmbulance />} />
               <Route path="/auth/verify-otp" element={<VerifyOTP />} />
         <Route path="/auth/pending" element={<Pending />} />
         <Route path="/auth/denied" element={<Denied />} />
-        <Route path="/auth/signup/doctor" element={<SignupDoctor />} />
               <Route path="/auth" element={<Navigate to="/auth/login" replace />} />
               <Route path="/offline" element={<Offline />} />
               <Route path="/dashboard" element={<ProtectedRoute><Layout><Dashboard /></Layout></ProtectedRoute>} />

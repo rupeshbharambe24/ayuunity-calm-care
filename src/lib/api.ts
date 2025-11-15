@@ -185,6 +185,17 @@ class ApiClient {
       } as T;
     }
     
+    // Mock file upload
+    if (endpoint === '/files' && method === 'POST') {
+      return {
+        id: 'f_' + Math.random().toString(36).substr(2, 9),
+        url: 'blob:demo-file-' + Date.now(),
+        type: 'application/pdf',
+        size: 12345,
+        hash: 'demo-hash-' + Date.now(),
+      } as T;
+    }
+    
     // Mock draft endpoints
     if (endpoint.includes('/draft')) {
       return {} as T;
@@ -217,6 +228,17 @@ class ApiClient {
   }
 
   async uploadFile(file: File): Promise<{ id: string; url: string; type: string; size: number }> {
+    // If in mock mode, return fake upload
+    if (this.mockMode) {
+      await new Promise(resolve => setTimeout(resolve, 600)); // Simulate delay
+      return {
+        id: 'f_' + Math.random().toString(36).substr(2, 9),
+        url: URL.createObjectURL(file),
+        type: file.type,
+        size: file.size,
+      };
+    }
+
     const formData = new FormData();
     formData.append('file', file);
 
